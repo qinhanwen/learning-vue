@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>learning-vue</title>
+</head>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.5.22/dist/vue.js"></script>
+
+<body>
+    <div id="learning-vue">
+        <ul>
+            <li v-for="tab in tabs">{{tab}}</li>
+        </ul>
+        <div v-html="bindHTML">
+        </div>
+        <div :id="id1">
+            123
+        </div>
+        <div>
+            multiply:{{number * 10}}
+        </div>
+    </div>
+</body>
+<script>
+    new Vue({
+        el: "#learning-vue",
+        data: {
+            tabs: [
+                'name1',
+                'name2'
+            ],
+            bindHTML: "<p>p标签</p>",
+            id1: 'myid',
+            number: 100,
+        },
+    })
+</script>
+
+</html>
