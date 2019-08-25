@@ -5,35 +5,138 @@
     <meta charset="UTF-8">
     <title>learning-vue</title>
 </head>
-<script src="https://cdn.jsdelivr.net/npm/vue@2.5.22/dist/vue.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.0/dist/vue.js"></script>
 
 <body>
     <div id="learning-vue">
+        <p v-show="show">show</p>
+        <p v-if="directive">if directive</p>
+        <p v-else="!directive">else-if directive</p>
+        <p v-else="directive">else directive</p>
+        <form>
+            <input type="text" name="userName" v-model="value" />
+            <p>{{value}}</p>
+        </form>
         <ul>
-            <li v-for="tab in tabs">{{tab}}</li>
+            <li v-for="(tab,index) in tabs" :class="tab+index" v-on:click="change(index)" track-by="tab.id">{{tab.name}}
+                {{index}}</li>
         </ul>
-        <div v-html="bindHTML">
-        </div>
+        <a :[attributename]="src"> ... </a>
+        <img :src="src" />
         <div :id="id1">
             123
         </div>
-        <div>
-            multiply:{{number * 10}}
+        <div :class="[classA,{classB:isB}]">
+            class
         </div>
+        <div v-bind="{id:id1,class:[classA,{classB:isB}]}">
+            other
+        </div>
+
+        <div @click="clickMe(1,$event)">
+            event
+        </div>
+        <div v-on:click="clickMe(2,$event)">
+            event2
+        </div>
+
+        <a href="http://www.baidu.com" v-on:click.prevent="clickMe(1,$event)">www.baidu.com</a>
+
+        <div @click="clickMe(1,$event)">
+            <div v-on:click.stop="clickMe(2,$event)">
+                event2
+            </div>
+        </div>
+
+        <input type="text" value="space" @keyup.enter="clickMe(1,$event)">
+        <input type="text" value="space" @keyup.13="clickMe(1,$event)">
+
+        <div v-cloak>
+            {{ message }}
+        </div>
+
+        <p rel=ele @click="clickMe">v-el</p>
+        <p ref=oneRef @click="clickMe">v-ref</p>
+        <div v-demo:a.b.c="message" @click="clickDirec()"></div>
+
+        <p v-pin="200">Stick me 200px from the top of the page</p>
+        <p v-pin1:[direction]="200">I am pinned onto the page at 200px to the left.</p>
     </div>
 </body>
+<style>
+    [v-cloak] {
+        display: none;
+    }
+</style>
 <script>
+    // 定义指令
+    Vue.directive('pin', {
+        bind: function (el, binding, vnode) {
+            el.style.position = 'fixed'
+            el.style.top = binding.value + 'px'
+        }
+    })
+    Vue.directive('pin1', {
+        bind: function (el, binding, vnode) {
+            el.style.position = 'fixed'
+            var s = (binding.arg == 'left' ? 'left' : 'top')
+            el.style[s] = binding.value + 'px'
+        }
+    })
+
+    Vue.directive('demo', {
+        bind: function (el, binding, vnode) {
+            var s = JSON.stringify;
+            el.innerHTML =
+                'name: ' + s(binding.name) + '<br>' +
+                'value: ' + s(binding.value) + '<br>' +
+                'expression: ' + s(binding.expression) + '<br>' +
+                'argument: ' + s(binding.arg) + '<br>' +
+                'modifiers: ' + s(binding.modifiers) + '<br>' +
+                'vnode keys: ' + Object.keys(vnode).join(', ')
+        },
+        update: function (el, value) {
+            console.log(el);
+            console.log(value);
+        }
+    })
     new Vue({
         el: "#learning-vue",
         data: {
-            tabs: [
-                'name1',
-                'name2'
-            ],
-            bindHTML: "<p>p标签</p>",
-            id1: 'myid',
-            number: 100,
+            message: {
+                name: 'hello qinhanwen',
+                age: 25
+            },
+            attributename:'href',
+            direction: 'left',
+            // ele:'',
+            show: false,
+            directive: false,
+            value: '',
+            id1: 'myId',
+            tabs: [{
+                name: 'q',
+                id: 1
+            }, {
+                name: 'z',
+                id: 2
+            }],
+            src: 'xxx.png',
+            classA: 'A',
+            isB: true,
         },
+        methods: {
+            change(index) {
+                this.tabs = this.tabs.filter((item, i) => i == index);
+            },
+            clickMe() {
+                console.log(this.$refs);
+                console.log(this.$eles);
+            },
+            clickDirec() {
+                this.message = 'hello'
+            }
+        }
     })
 </script>
 
