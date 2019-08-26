@@ -9,84 +9,30 @@
 
 <body>
     <div id="learning-vue">
-        <button-counter></button-counter>
-        <post-list v-on:click-me="clickMe" v-for="post in posts" :post="post" :my-name="post.name"></post-list>
-        <slot-box :name1="name" :name2="name">
-            <template v-slot:default="slotProps">
-                {{slotProps.name1}}
-                {{slotProps.name2}}
-            </template>
-        </slot-box>
-        <slot-name-box>
-            <template v-slot:header>
-                <header>这里是header哦</header>
-            </template>
-            <template v-slot:footer>
-                <footer>这里是footer哦</footer>
-            </template>
-        </slot-name-box>
-        <slot-name-box>
-            <template #header>
-                <header>这里是header哦</header>
-            </template>
-            <template #footer>
-                <footer>这里是footer哦</footer>
-            </template>
-        </slot-name-box>
+        {{message | capitalize}}
+        {{message | capitalize1}}
+        {{message | capitalize2(2,3)}}
     </div>
 </body>
 <script>
-    Vue.component('button-counter', {
-        data: function () {
-            return {
-                count: 0
-            }
-        },
-        template: '<button v-on:click="count++">You clicked me {{ count }} times.</button>'
-    })
-    Vue.component('post-list', {
-        // props: ['post','myName'],
-        props: {
-            post: Object,
-            myName: String
-        },
-        template: `<p v-on:click="$emit('click-me','{a:1,b:2}')">{{post.title}}{{post.id}}{{myName}}</p>`
-    })
-    Vue.component('slot-box', {
-        props: ['name1', 'name2'],
-        template: `<div>my name is <slot :name1="name1" :name2="name2"></slot></div>`
-    })
-    Vue.component('slot-name-box', {
-        template: `
-        <div>
-            <slot name="header"></slot>
-            <slot name="footer"></slot>
-        </div>`
+    Vue.filter('capitalize', function (value) {
+        if (!value) return ''
+        value = value.toString()
+        return value.toUpperCase();
     })
     new Vue({
         el: "#learning-vue",
         data: {
-            name: 'qinhanwen',
-            posts: [{
-                    id: 1,
-                    title: 'My journey with Vue',
-                    name: '123'
-                },
-                {
-                    id: 2,
-                    title: 'Blogging with Vue',
-                    name: '123'
-                },
-                {
-                    id: 3,
-                    title: 'Why Vue is so fun',
-                    name: '123'
-                }
-            ]
+            message: 'QInhAnwen'
         },
-        methods: {
-            clickMe: function (params) {
-                console.log(params)
+        filters: {
+            capitalize1: function (value) {
+                if (!value) return ''
+                value = value.toString()
+                return value.substr(2);
+            },
+            capitalize2: function (value, value2, value3) {
+                return value + value2 + value3;
             }
         }
     })
