@@ -9,30 +9,54 @@
 
 <body>
     <div id="learning-vue">
-        {{message | capitalize}}
-        {{message | capitalize1}}
-        {{message | capitalize2(2,3)}}
+        <div class="static" v-bind:class="{ active: isActive, 'text-danger': hasError }">class</div>
+        <div class="static" v-bind:class="classObject">class1</div>
+        <div v-bind:class="classObjectComputed">class2</div>
+        <div v-bind:class="[activeClass, errorClass]">class4</div>
+        <div v-bind:class="[isActive ? activeClass : '', errorClass]">class5</div>
+        <div v-bind:class="[{active:isActive}, errorClass]">class6</div>
+        <class-box :class="{active:isActive}"></class-box>
+
+        <div v-bind:style="{ color: activeColor, fontSize: fontSize + 'px' }">style</div>
+        <div v-bind:style="styleObject">style1</div>
+        <div v-bind:style="[baseStyles,overridingStyles]">style2</div>
     </div>
 </body>
 <script>
-    Vue.filter('capitalize', function (value) {
-        if (!value) return ''
-        value = value.toString()
-        return value.toUpperCase();
+    Vue.component('class-box', {
+        template: '<p class="inner-tag">component</p>'
     })
     new Vue({
         el: "#learning-vue",
         data: {
-            message: 'QInhAnwen'
-        },
-        filters: {
-            capitalize1: function (value) {
-                if (!value) return ''
-                value = value.toString()
-                return value.substr(2);
+            isActive: true,
+            hasError: true,
+            classObject: {
+                active: true,
+                'text-danger': true
             },
-            capitalize2: function (value, value2, value3) {
-                return value + value2 + value3;
+            activeClass: 'active',
+            errorClass: 'text-danger',
+            activeColor: 'red',
+            fontSize: 30,
+            styleObject: {
+                color: 'red',
+                fontSize: '13px'
+            },
+            baseStyles: {
+                color: 'green',
+                fontSize: '30px'
+            },
+            overridingStyles: {
+                'font-weight': 'bold'
+            }
+        },
+        computed: {
+            classObjectComputed: function () {
+                return {
+                    active: this.isActive,
+                    'text-danger': this.hasError
+                }
             }
         }
     })
