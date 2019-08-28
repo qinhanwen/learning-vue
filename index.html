@@ -6,60 +6,44 @@
     <title>learning-vue</title>
 </head>
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+<!-- <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script> -->
 
 <body>
     <div id="learning-vue">
-        <div class="static" v-bind:class="{ active: isActive, 'text-danger': hasError }">class</div>
-        <div class="static" v-bind:class="classObject">class1</div>
-        <div v-bind:class="classObjectComputed">class2</div>
-        <div v-bind:class="[activeClass, errorClass]">class4</div>
-        <div v-bind:class="[isActive ? activeClass : '', errorClass]">class5</div>
-        <div v-bind:class="[{active:isActive}, errorClass]">class6</div>
-        <class-box :class="{active:isActive}"></class-box>
-
-        <div v-bind:style="{ color: activeColor, fontSize: fontSize + 'px' }">style</div>
-        <div v-bind:style="styleObject">style1</div>
-        <div v-bind:style="[baseStyles,overridingStyles]">style2</div>
+        <div>
+            <input-box ref="user-input"></input-box>
+        </div>
     </div>
 </body>
 <script>
-    Vue.component('class-box', {
-        template: '<p class="inner-tag">component</p>'
+    Vue.component('input-box', {
+        template: `<input />`
     })
-    new Vue({
-        el: "#learning-vue",
+    const app = new Vue({
+        // el: "#learning-vue",
         data: {
-            isActive: true,
-            hasError: true,
-            classObject: {
-                active: true,
-                'text-danger': true
-            },
-            activeClass: 'active',
-            errorClass: 'text-danger',
-            activeColor: 'red',
-            fontSize: 30,
-            styleObject: {
-                color: 'red',
-                fontSize: '13px'
-            },
-            baseStyles: {
-                color: 'green',
-                fontSize: '30px'
-            },
-            overridingStyles: {
-                'font-weight': 'bold'
-            }
+            name: 'qinhanwen'
         },
-        computed: {
-            classObjectComputed: function () {
-                return {
-                    active: this.isActive,
-                    'text-danger': this.hasError
-                }
-            }
-        }
     })
+    // console.log(app.$refs['user-input'].$parent);
+    // console.log(app.$refs);
+    // console.log(app.$root);
+    // console.log(app.$data);
+    // console.log(app.$el);
+    // const unwatch = app.$watch('name', function (newVal) {
+    //     console.log(newVal);
+    // }, {
+    //     // immediate:true
+    // })
+    // app.name = "zeng";
+    // unwatch();
+    // app.name = "zeng1";
+    var MyComponent = Vue.extend({
+        template: '<div>$mount!</div>'
+    })
+
+    // 创建并挂载到 #app (会替换 #app)
+    new MyComponent().$mount('#learning-vue');
 </script>
 
 </html>
